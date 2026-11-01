@@ -1,0 +1,28 @@
+{
+  "name": "@fleet-mcp/fleet-registry",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Read-only MCP server over the Statehouse fleet manifest: list and look up fleet apps, check hub links, audit fleet conventions, find unregistered repos.",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "fleet-registry-mcp": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.2",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/node": "^22.19.0",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

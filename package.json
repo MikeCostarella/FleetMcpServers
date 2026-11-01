@@ -1,0 +1,18 @@
+{
+  "name": "fleet-mcp-servers",
+  "private": true,
+  "version": "0.1.0",
+  "description": "MCP servers that give an AI assistant structured, read-only access to the Statehouse fleet (C:\\projects). One server per concern; see README.md.",
+  "type": "module",
+  "workspaces": [
+    "servers/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "test": "npm run test --workspaces",
+    "smoke": "node scripts/smoke.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
