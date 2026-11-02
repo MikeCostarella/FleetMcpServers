@@ -4,12 +4,13 @@ MCP servers that give an AI assistant (Claude Desktop, Claude Code, or any
 MCP client) structured access to the Statehouse fleet under `C:\projects`.
 
 One server per concern, each a small TypeScript program that speaks MCP over
-stdio. Servers are read-only unless their README says otherwise. Shared code
+stdio. Servers are read-only unless their README says otherwise (llm-registry calls LLM providers but writes nothing). Shared code
 and the Statehouse scripts stay where they are; these servers wrap them.
 
 | Server | What it answers | Status |
 |---|---|---|
 | [`servers/fleet-registry`](servers/fleet-registry/README.md) | Which repos exist, what each one is, is it linked from every hub, does it follow the fleet conventions, what is on disk but unregistered | v0.1 |
+| [`servers/llm-registry`](servers/llm-registry/README.md) | Which LLMs are on file (from the LlmRegistry app's `registry/models.json`), what each costs and can do, which tag-query group it falls in, and **run a prompt across a model, a group or a list of models** with latency, tokens and cost. Keys from env vars. | v0.1 |
 | `servers/fleet-drift` (planned) | Per-county values copied between repos and never substituted; which repos are behind on voters-core / parcels-core / basemaps / a11y; PWA precache size vs the 5 MB ceiling | — |
 | `servers/civic-data` (planned) | Read-only queries over OhioCivicData (`civic` schema), voter tables excluded by connection | — |
 | `servers/ohio-lookup` (planned) | Address / lat-long → county, jurisdiction, precinct, income-tax collector, parcel | — |
@@ -62,7 +63,7 @@ claude mcp add fleet-registry -e FLEET_ROOT=C:\projects -- node C:\projects\Flee
 ```
 
 Restart the client after editing its config; the server's tools then show up
-as `fleet_summary`, `list_apps`, `get_app`, ... Rebuild (`npm run build`)
+as `fleet_summary`, `list_apps`, `get_app`, ... (fleet-registry) or `registry_summary`, `list_models`, `run_operation`, ... (llm-registry) Rebuild (`npm run build`)
 after changing any `src/` file; clients spawn the built `dist/index.js`.
 
 ## Layout
@@ -71,12 +72,14 @@ after changing any `src/` file; clients spawn the built `dist/index.js`.
 FleetMcpServers/
 ├── package.json            npm workspaces root: build / test / smoke all servers
 ├── tsconfig.base.json      shared compiler options (ES2022, NodeNext, strict)
-├── scripts/smoke.mjs       MCP client that exercises a built server end to end
+├── scripts/smoke.mjs       MCP client that exercises fleet-registry end to end
+├── scripts/smoke-llm-registry.mjs   same for llm-registry (npm run smoke:llm)
 └── servers/
-    └── fleet-registry/
-        ├── src/            index.ts (MCP wiring) + one module per concern
-        ├── test/           vitest, against a synthetic fleet built in a temp dir
-        └── dist/           build output (git-ignored)
+    ├── fleet-registry/
+    │   ├── src/            index.ts (MCP wiring) + one module per concern
+    │   ├── test/           vitest, against a synthetic fleet built in a temp dir
+    │   └── dist/           build output (git-ignored)
+    └── llm-registry/       same shape; reads C:\projects\LlmRegistry\registry\models.json
 ```
 
 ## Adding a server

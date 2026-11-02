@@ -1,0 +1,28 @@
+{
+  "name": "@fleet-mcp/llm-registry",
+  "private": true,
+  "version": "0.1.0",
+  "description": "MCP server over the LlmRegistry registry file: list and look up LLMs, resolve tag-query groups, and run a saved or ad-hoc operation across a model, a group, or a list of models. Keys come from environment variables.",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "llm-registry-mcp": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.2",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/node": "^22.19.0",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
