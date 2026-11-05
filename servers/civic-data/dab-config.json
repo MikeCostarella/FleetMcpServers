@@ -1,0 +1,211 @@
+{
+  "$schema": "https://github.com/Azure/data-api-builder/releases/latest/download/dab.draft.schema.json",
+  "data-source": {
+    "database-type": "mssql",
+    "connection-string": "@env('SQL_CONNECTION_STRING')",
+    "options": {
+      "set-session-context": false
+    }
+  },
+  "runtime": {
+    "rest": {
+      "enabled": true,
+      "path": "/api",
+      "request-body-strict": true
+    },
+    "graphql": {
+      "enabled": false
+    },
+    "mcp": {
+      "enabled": true,
+      "path": "/mcp",
+      "description": "OhioCivicData (civic schema) — read-only Ohio public-records database behind the Statehouse fleet: counties, jurisdictions, places, boundaries, precinct summaries, public parcel view, land-use codes, income taxes, legislators, schools, county stats, vendors, info links, elections, data sources. Voter tables are not exposed.",
+      "dml-tools": {
+        "describe-entities": true,
+        "read-records": true,
+        "create-record": false,
+        "update-record": false,
+        "delete-record": false,
+        "execute-entity": false
+      }
+    },
+    "host": {
+      "mode": "development",
+      "cors": {
+        "origins": [],
+        "allow-credentials": false
+      },
+      "authentication": {
+        "provider": "Simulator"
+      }
+    },
+    "pagination": {
+      "default-page-size": 100,
+      "max-page-size": 1000
+    }
+  },
+  "entities": {
+    "County": {
+      "source": { "object": "civic.county", "type": "table" },
+      "rest": { "enabled": true, "path": "/counties" },
+      "graphql": { "enabled": false },
+      "permissions": [
+        { "role": "anonymous", "actions": [ { "action": "read", "fields": { "exclude": [ "geom" ] } } ] },
+        { "role": "reader",    "actions": [ { "action": "read", "fields": { "exclude": [ "geom" ] } } ] }
+      ]
+    },
+    "Jurisdiction": {
+      "source": { "object": "civic.jurisdiction", "type": "table" },
+      "rest": { "enabled": true, "path": "/jurisdictions" },
+      "graphql": { "enabled": false },
+      "permissions": [
+        { "role": "anonymous", "actions": [ { "action": "read", "fields": { "exclude": [ "geom" ] } } ] },
+        { "role": "reader",    "actions": [ { "action": "read", "fields": { "exclude": [ "geom" ] } } ] }
+      ]
+    },
+    "Place": {
+      "source": { "object": "civic.place", "type": "table" },
+      "rest": { "enabled": true, "path": "/places" },
+      "graphql": { "enabled": false },
+      "permissions": [
+        { "role": "anonymous", "actions": [ { "action": "read", "fields": { "exclude": [ "geom" ] } } ] },
+        { "role": "reader",    "actions": [ { "action": "read", "fields": { "exclude": [ "geom" ] } } ] }
+      ]
+    },
+    "Boundary": {
+      "source": { "object": "civic.boundary", "type": "table" },
+      "rest": { "enabled": true, "path": "/boundaries" },
+      "graphql": { "enabled": false },
+      "permissions": [
+        { "role": "anonymous", "actions": [ { "action": "read", "fields": { "exclude": [ "geom" ] } } ] },
+        { "role": "reader",    "actions": [ { "action": "read", "fields": { "exclude": [ "geom" ] } } ] }
+      ]
+    },
+    "Precinct": {
+      "source": { "object": "civic.v_precinct_summary", "type": "view", "key-fields": [ "precinct_id" ] },
+      "rest": { "enabled": true, "path": "/precincts" },
+      "graphql": { "enabled": false },
+      "permissions": [
+        { "role": "anonymous", "actions": [ { "action": "read" } ] },
+        { "role": "reader",    "actions": [ { "action": "read" } ] }
+      ]
+    },
+    "Parcel": {
+      "source": { "object": "civic.v_parcel_public", "type": "view", "key-fields": [ "parcel_id" ] },
+      "rest": { "enabled": true, "path": "/parcels" },
+      "graphql": { "enabled": false },
+      "permissions": [
+        { "role": "anonymous", "actions": [ { "action": "read" } ] },
+        { "role": "reader",    "actions": [ { "action": "read" } ] }
+      ]
+    },
+    "LandUseCode": {
+      "source": { "object": "civic.land_use_code", "type": "table" },
+      "rest": { "enabled": true, "path": "/land-use-codes" },
+      "graphql": { "enabled": false },
+      "permissions": [
+        { "role": "anonymous", "actions": [ { "action": "read" } ] },
+        { "role": "reader",    "actions": [ { "action": "read" } ] }
+      ]
+    },
+    "IncomeTax": {
+      "source": { "object": "civic.income_tax", "type": "table" },
+      "rest": { "enabled": true, "path": "/income-taxes" },
+      "graphql": { "enabled": false },
+      "permissions": [
+        { "role": "anonymous", "actions": [ { "action": "read" } ] },
+        { "role": "reader",    "actions": [ { "action": "read" } ] }
+      ]
+    },
+    "Legislator": {
+      "source": { "object": "civic.legislator", "type": "table" },
+      "rest": { "enabled": true, "path": "/legislators" },
+      "graphql": { "enabled": false },
+      "permissions": [
+        { "role": "anonymous", "actions": [ { "action": "read" } ] },
+        { "role": "reader",    "actions": [ { "action": "read" } ] }
+      ]
+    },
+    "CountyLegislator": {
+      "source": { "object": "civic.county_legislator", "type": "table" },
+      "rest": { "enabled": true, "path": "/county-legislators" },
+      "graphql": { "enabled": false },
+      "permissions": [
+        { "role": "anonymous", "actions": [ { "action": "read" } ] },
+        { "role": "reader",    "actions": [ { "action": "read" } ] }
+      ]
+    },
+    "School": {
+      "source": { "object": "civic.school", "type": "table" },
+      "rest": { "enabled": true, "path": "/schools" },
+      "graphql": { "enabled": false },
+      "permissions": [
+        { "role": "anonymous", "actions": [ { "action": "read", "fields": { "exclude": [ "geom" ] } } ] },
+        { "role": "reader",    "actions": [ { "action": "read", "fields": { "exclude": [ "geom" ] } } ] }
+      ]
+    },
+    "SchoolDistrict": {
+      "source": { "object": "civic.school_district", "type": "table" },
+      "rest": { "enabled": true, "path": "/school-districts" },
+      "graphql": { "enabled": false },
+      "permissions": [
+        { "role": "anonymous", "actions": [ { "action": "read" } ] },
+        { "role": "reader",    "actions": [ { "action": "read" } ] }
+      ]
+    },
+    "CountyStat": {
+      "source": { "object": "civic.county_stat", "type": "table" },
+      "rest": { "enabled": true, "path": "/county-stats" },
+      "graphql": { "enabled": false },
+      "permissions": [
+        { "role": "anonymous", "actions": [ { "action": "read" } ] },
+        { "role": "reader",    "actions": [ { "action": "read" } ] }
+      ]
+    },
+    "CountyVendor": {
+      "source": { "object": "civic.county_vendor", "type": "table" },
+      "rest": { "enabled": true, "path": "/county-vendors" },
+      "graphql": { "enabled": false },
+      "permissions": [
+        { "role": "anonymous", "actions": [ { "action": "read" } ] },
+        { "role": "reader",    "actions": [ { "action": "read" } ] }
+      ]
+    },
+    "InfoLink": {
+      "source": { "object": "civic.info_link", "type": "table" },
+      "rest": { "enabled": true, "path": "/info-links" },
+      "graphql": { "enabled": false },
+      "permissions": [
+        { "role": "anonymous", "actions": [ { "action": "read" } ] },
+        { "role": "reader",    "actions": [ { "action": "read" } ] }
+      ]
+    },
+    "Election": {
+      "source": { "object": "civic.election", "type": "table" },
+      "rest": { "enabled": true, "path": "/elections" },
+      "graphql": { "enabled": false },
+      "permissions": [
+        { "role": "anonymous", "actions": [ { "action": "read" } ] },
+        { "role": "reader",    "actions": [ { "action": "read" } ] }
+      ]
+    },
+    "CountyElectionSource": {
+      "source": { "object": "civic.county_election_source", "type": "table" },
+      "rest": { "enabled": true, "path": "/county-election-sources" },
+      "graphql": { "enabled": false },
+      "permissions": [
+        { "role": "anonymous", "actions": [ { "action": "read" } ] },
+        { "role": "reader",    "actions": [ { "action": "read" } ] }
+      ]
+    },
+    "Source": {
+      "source": { "object": "civic.source", "type": "table" },
+      "rest": { "enabled": true, "path": "/sources" },
+      "graphql": { "enabled": false },
+      "permissions": [
+        { "role": "anonymous", "actions": [ { "action": "read" } ] },
+        { "role": "reader",    "actions": [ { "action": "read" } ] }
+      ]
+    }
+  }
+}

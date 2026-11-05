@@ -12,13 +12,13 @@ and the Statehouse scripts stay where they are; these servers wrap them.
 | [`servers/fleet-registry`](servers/fleet-registry/README.md) | Which repos exist, what each one is, is it linked from every hub, does it follow the fleet conventions, what is on disk but unregistered | v0.1 |
 | [`servers/llm-registry`](servers/llm-registry/README.md) | Which LLMs are on file (from the LlmRegistry app's `registry/models.json`), what each costs and can do, which tag-query group it falls in, and **run a prompt across a model, a group or a list of models** with latency, tokens and cost. Keys from env vars. | v0.1 |
 | `servers/fleet-drift` (planned) | Per-county values copied between repos and never substituted; which repos are behind on voters-core / parcels-core / basemaps / a11y; PWA precache size vs the 5 MB ceiling | — |
-| `servers/civic-data` (planned) | Read-only queries over OhioCivicData (`civic` schema), voter tables excluded by connection | — |
+| [`servers/civic-data`](servers/civic-data/README.md) | Read-only queries over OhioCivicData (`civic` schema) through Microsoft Data API builder's MCP mode — counties, jurisdictions, places, boundaries, precinct summaries, public parcel view, income taxes, legislators, schools, stats, links. Config only, no TypeScript; voter tables and raw `parcel` are not entities. | v0.1 |
 | `servers/ohio-lookup` (planned) | Address / lat-long → county, jurisdiction, precinct, income-tax collector, parcel | — |
 | `servers/data-watch` (planned) | Stale outside datasets (`data-sources.json`), job runs | — |
 
 ## Setup (lvp-01 or lvp-02)
 
-Needs Node 18 or newer. All commands below are **PowerShell**.
+Needs Node 18 or newer; `civic-data` additionally needs the .NET SDK and the `dab` global tool (see its README). All commands below are **PowerShell**.
 
 ```powershell
 cd C:\projects\FleetMcpServers; npm install; npm run build
@@ -79,7 +79,8 @@ FleetMcpServers/
     │   ├── src/            index.ts (MCP wiring) + one module per concern
     │   ├── test/           vitest, against a synthetic fleet built in a temp dir
     │   └── dist/           build output (git-ignored)
-    └── llm-registry/       same shape; reads C:\projects\LlmRegistry\registry\models.json
+    ├── llm-registry/       same shape; reads C:\projects\LlmRegistry\registry\models.json
+    └── civic-data/         dab-config.json + .env for Microsoft Data API builder (`dab start --mcp-stdio`); no src/
 ```
 
 ## Adding a server
