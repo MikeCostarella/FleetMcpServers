@@ -10,11 +10,11 @@ holds its configuration. `package.json` exists so the workspace `npm run build` 
 
 | Entity | Source | Notes |
 |---|---|---|
-| County, Jurisdiction, Place, Boundary | `civic.*` tables | `geom` column excluded (geography type; lat/lon stay) |
+| County, Jurisdiction, Place, Boundary, School | `civic.v_*_public` views (`sql\027_mcp_public_views.sql`) | same columns minus `geom` (DAB cannot read GEOGRAPHY); lat/lon stay |
 | Precinct | `civic.v_precinct_summary` view | counts + polling place, no voter rows |
 | Parcel | `civic.v_parcel_public` view | **not** `civic.parcel` — no `owner_name`, `legal_description`, `centroid` |
 | LandUseCode, IncomeTax, Legislator, CountyLegislator | tables | |
-| School, SchoolDistrict | tables | School `geom` excluded |
+| SchoolDistrict | table | |
 | CountyStat, CountyVendor, InfoLink | tables | |
 | Election, CountyElectionSource, Source | tables | |
 
@@ -75,17 +75,18 @@ cd C:\projects\FleetMcpServers\servers\civic-data; dab start --config .\dab-conf
 
 ## Client config
 
-The `dab` shim lives in `%USERPROFILE%\.dotnet\tools\dab.exe`. Clients that spawn
+The `dab` shim lives in `%USERPROFILE%\.dotnet\tools\dab.cmd`. Clients that spawn
 without a shell may not see PATH, so the full path is safest.
 
 **Claude Desktop** — Settings → Developer → Edit Config, under `mcpServers`:
 
 ```json
 "civic-data": {
-  "command": "C:\\Users\\<you>\\.dotnet\\tools\\dab.exe",
+  "command": "C:\\Users\\<you>\\.dotnet\\tools\\dab.cmd",
   "args": [
     "start", "--mcp-stdio", "role:reader",
-    "--config", "C:\\projects\\FleetMcpServers\\servers\\civic-data\\dab-config.json"
+    "--config", "C:\\projects\\FleetMcpServers\\servers\\civic-data\\dab-config.json",
+    "--LogLevel", "error"
   ],
   "env": {
     "SQL_CONNECTION_STRING": "Server=localhost;Database=OhioCivicData;Integrated Security=True;TrustServerCertificate=True;Encrypt=False"
@@ -96,7 +97,7 @@ without a shell may not see PATH, so the full path is safest.
 **Claude Code** — PowerShell:
 
 ```powershell
-claude mcp add civic-data -e "SQL_CONNECTION_STRING=Server=localhost;Database=OhioCivicData;Integrated Security=True;TrustServerCertificate=True;Encrypt=False" -- dab start --mcp-stdio role:reader --config C:\projects\FleetMcpServers\servers\civic-data\dab-config.json
+claude mcp add civic-data -e "SQL_CONNECTION_STRING=Server=localhost;Database=OhioCivicData;Integrated Security=True;TrustServerCertificate=True;Encrypt=False" -- dab start --mcp-stdio role:reader --config C:\projects\FleetMcpServers\servers\civic-data\dab-config.json --LogLevel error
 ```
 
 Restart the client, then ask it to describe the entities. First useful prompts:
@@ -122,8 +123,11 @@ dab update ParcelsByJurisdiction --mcp.custom-tool true
 
 ## Known limits
 
-- `geom` (geography) columns are excluded per entity. If `dab validate` still objects
-  to an entity with a geography column, swap that entity to a view that omits it.
+- DAB fails an entity outright on a GEOGRAPHY column (`DataReader.GetFieldType returned
+  null`) before any field exclusion applies, so every table with `geom` is reached through
+  a view that omits it. New table with geometry → add a view in `027_mcp_public_views.sql`.
+- The views live in the OhioCivicData repo and are created by its `build_database.cmd`;
+  on a machine where the database predates script 027, run that script once in SSMS.
 - `describe-entities` is DAB's schema tool; the model sees column names and types
   but not row samples. `read-records` takes `$filter`, `$orderby`, `$first`, `$select`.
 - OhioDataLake: same recipe, sibling folder `servers/data-lake`, own `dab-config.json`

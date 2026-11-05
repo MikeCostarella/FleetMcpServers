@@ -12,20 +12,21 @@ IF DATABASE_PRINCIPAL_ID('civic_mcp_reader') IS NULL
     CREATE ROLE civic_mcp_reader;
 GO
 
--- Public views (the only parcel/precinct surface the MCP sees)
-GRANT SELECT ON civic.v_parcel_public      TO civic_mcp_reader;
-GRANT SELECT ON civic.v_precinct_summary   TO civic_mcp_reader;
+-- Public views (sql\001 section 9 and sql\027) -- the only surface the MCP sees
+-- for anything that carries owner data or a GEOGRAPHY column
+GRANT SELECT ON civic.v_parcel_public         TO civic_mcp_reader;
+GRANT SELECT ON civic.v_precinct_summary      TO civic_mcp_reader;
+GRANT SELECT ON civic.v_county_public         TO civic_mcp_reader;
+GRANT SELECT ON civic.v_jurisdiction_public   TO civic_mcp_reader;
+GRANT SELECT ON civic.v_place_public          TO civic_mcp_reader;
+GRANT SELECT ON civic.v_boundary_public       TO civic_mcp_reader;
+GRANT SELECT ON civic.v_school_public         TO civic_mcp_reader;
 
 -- Reference tables
-GRANT SELECT ON civic.county                  TO civic_mcp_reader;
-GRANT SELECT ON civic.jurisdiction            TO civic_mcp_reader;
-GRANT SELECT ON civic.place                   TO civic_mcp_reader;
-GRANT SELECT ON civic.boundary                TO civic_mcp_reader;
 GRANT SELECT ON civic.land_use_code           TO civic_mcp_reader;
 GRANT SELECT ON civic.income_tax              TO civic_mcp_reader;
 GRANT SELECT ON civic.legislator              TO civic_mcp_reader;
 GRANT SELECT ON civic.county_legislator       TO civic_mcp_reader;
-GRANT SELECT ON civic.school                  TO civic_mcp_reader;
 GRANT SELECT ON civic.school_district         TO civic_mcp_reader;
 GRANT SELECT ON civic.county_stat             TO civic_mcp_reader;
 GRANT SELECT ON civic.county_vendor           TO civic_mcp_reader;

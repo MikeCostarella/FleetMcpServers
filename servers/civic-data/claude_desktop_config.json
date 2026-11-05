@@ -1,0 +1,18 @@
+{
+  "mcpServers": {
+    "civic-data": {
+      "command": "C:\\Users\\Mike\\.dotnet\\tools\\dab.cmd",
+      "args": [
+        "start",
+        "--mcp-stdio",
+        "role:reader",
+        "--config",
+        "C:\\projects\\FleetMcpServers\\servers\\civic-data\\dab-config.json",
+        "--LogLevel", "error"
+      ],
+      "env": {
+        "SQL_CONNECTION_STRING": "Server=localhost;Database=OhioCivicData;Integrated Security=True;TrustServerCertificate=True;Encrypt=False"
+      }
+    }
+  }
+}

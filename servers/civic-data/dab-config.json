@@ -46,39 +46,39 @@
   },
   "entities": {
     "County": {
-      "source": { "object": "civic.county", "type": "table" },
+      "source": { "object": "civic.v_county_public", "type": "view", "key-fields": [ "fips" ] },
       "rest": { "enabled": true, "path": "/counties" },
       "graphql": { "enabled": false },
       "permissions": [
-        { "role": "anonymous", "actions": [ { "action": "read", "fields": { "exclude": [ "geom" ] } } ] },
-        { "role": "reader",    "actions": [ { "action": "read", "fields": { "exclude": [ "geom" ] } } ] }
+        { "role": "anonymous", "actions": [ { "action": "read" } ] },
+        { "role": "reader",    "actions": [ { "action": "read" } ] }
       ]
     },
     "Jurisdiction": {
-      "source": { "object": "civic.jurisdiction", "type": "table" },
+      "source": { "object": "civic.v_jurisdiction_public", "type": "view", "key-fields": [ "geoid" ] },
       "rest": { "enabled": true, "path": "/jurisdictions" },
       "graphql": { "enabled": false },
       "permissions": [
-        { "role": "anonymous", "actions": [ { "action": "read", "fields": { "exclude": [ "geom" ] } } ] },
-        { "role": "reader",    "actions": [ { "action": "read", "fields": { "exclude": [ "geom" ] } } ] }
+        { "role": "anonymous", "actions": [ { "action": "read" } ] },
+        { "role": "reader",    "actions": [ { "action": "read" } ] }
       ]
     },
     "Place": {
-      "source": { "object": "civic.place", "type": "table" },
+      "source": { "object": "civic.v_place_public", "type": "view", "key-fields": [ "place_id" ] },
       "rest": { "enabled": true, "path": "/places" },
       "graphql": { "enabled": false },
       "permissions": [
-        { "role": "anonymous", "actions": [ { "action": "read", "fields": { "exclude": [ "geom" ] } } ] },
-        { "role": "reader",    "actions": [ { "action": "read", "fields": { "exclude": [ "geom" ] } } ] }
+        { "role": "anonymous", "actions": [ { "action": "read" } ] },
+        { "role": "reader",    "actions": [ { "action": "read" } ] }
       ]
     },
     "Boundary": {
-      "source": { "object": "civic.boundary", "type": "table" },
+      "source": { "object": "civic.v_boundary_public", "type": "view", "key-fields": [ "boundary_id" ] },
       "rest": { "enabled": true, "path": "/boundaries" },
       "graphql": { "enabled": false },
       "permissions": [
-        { "role": "anonymous", "actions": [ { "action": "read", "fields": { "exclude": [ "geom" ] } } ] },
-        { "role": "reader",    "actions": [ { "action": "read", "fields": { "exclude": [ "geom" ] } } ] }
+        { "role": "anonymous", "actions": [ { "action": "read" } ] },
+        { "role": "reader",    "actions": [ { "action": "read" } ] }
       ]
     },
     "Precinct": {
@@ -136,12 +136,12 @@
       ]
     },
     "School": {
-      "source": { "object": "civic.school", "type": "table" },
+      "source": { "object": "civic.v_school_public", "type": "view", "key-fields": [ "school_id" ] },
       "rest": { "enabled": true, "path": "/schools" },
       "graphql": { "enabled": false },
       "permissions": [
-        { "role": "anonymous", "actions": [ { "action": "read", "fields": { "exclude": [ "geom" ] } } ] },
-        { "role": "reader",    "actions": [ { "action": "read", "fields": { "exclude": [ "geom" ] } } ] }
+        { "role": "anonymous", "actions": [ { "action": "read" } ] },
+        { "role": "reader",    "actions": [ { "action": "read" } ] }
       ]
     },
     "SchoolDistrict": {
